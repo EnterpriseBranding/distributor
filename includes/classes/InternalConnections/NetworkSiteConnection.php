@@ -105,6 +105,7 @@ class NetworkSiteConnection extends Connection {
 
 		if ( ! is_wp_error( $new_post_id ) ) {
 			update_post_meta( $new_post_id, 'dt_original_post_id', (int) $post_id );
+			update_post_meta( $new_post_id, 'dt_original_parent_post', (int) $post->post_parent );
 			update_post_meta( $new_post_id, 'dt_original_blog_id', (int) $original_blog_id );
 			update_post_meta( $new_post_id, 'dt_syndicate_time', time() );
 			update_post_meta( $new_post_id, 'dt_original_post_url', esc_url_raw( $original_post_url ) );
@@ -202,6 +203,7 @@ class NetworkSiteConnection extends Connection {
 				update_post_meta( $new_post_id, 'dt_original_post_id', (int) $item_array['remote_post_id'] );
 				update_post_meta( $new_post_id, 'dt_original_blog_id', (int) $this->site->blog_id );
 				update_post_meta( $new_post_id, 'dt_syndicate_time', time() );
+				update_post_meta( $new_post_id, 'dt_original_post_parent', (int) $post->post_parent );
 				update_post_meta( $new_post_id, 'dt_original_post_url', esc_url_raw( $post->link ) );
 
 				\Distributor\Utils\set_meta( $new_post_id, $post->meta );

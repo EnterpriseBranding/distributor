@@ -76,6 +76,10 @@ function process_distributor_attributes( $post, $request, $update ) {
 		update_post_meta( $post->ID, 'dt_original_post_id', (int) $request['distributor_remote_post_id'] );
 	}
 
+	if ( ! empty( $request['distributor_original_post_parent'] ) ) {
+		update_post_meta( $post->ID, 'dt_original_post_parent', (int) $request['distributor_original_post_parent'] );
+	}
+
 	if ( ! empty( $request['distributor_original_site_name'] ) ) {
 		update_post_meta( $post->ID, 'dt_original_site_name', sanitize_text_field( $request['distributor_original_site_name'] ) );
 	}

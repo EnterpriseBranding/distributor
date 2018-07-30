@@ -372,6 +372,7 @@ class WordPressExternalConnection extends ExternalConnection {
 			update_post_meta( $new_post, 'dt_original_post_id', (int) $item_array['remote_post_id'] );
 			update_post_meta( $new_post, 'dt_original_source_id', (int) $this->id );
 			update_post_meta( $new_post, 'dt_syndicate_time', time() );
+			update_post_meta( $new_post, 'dt_original_post_parent', (int) $post_array['post_parent'] );
 			update_post_meta( $new_post, 'dt_original_post_url', esc_url_raw( $post_array['link'] ) );
 			update_post_meta( $new_post, 'dt_original_site_name', sanitize_text_field( $post_array['original_site_name'] ) );
 			update_post_meta( $new_post, 'dt_original_site_url', sanitize_text_field( $post_array['original_site_url'] ) );
@@ -473,21 +474,22 @@ class WordPressExternalConnection extends ExternalConnection {
 		 * Now let's push
 		 */
 		$post_body = [
-			'title'                          => get_the_title( $post_id ),
-			'slug'                           => $post->post_name,
-			'content'                        => apply_filters( 'the_content', $post->post_content ),
-			'type'                           => $post->post_type,
-			'status'                         => ( ! empty( $args['post_status'] ) ) ? $args['post_status'] : 'publish',
-			'excerpt'                        => $post->post_excerpt,
-			'distributor_original_source_id' => $this->id,
-			'distributor_original_site_name' => get_bloginfo( 'name' ),
-			'distributor_original_site_url'  => home_url(),
-			'distributor_original_post_url'  => get_permalink( $post_id ),
-			'distributor_remote_post_id'     => $post_id,
-			'distributor_signature'          => $signature,
-			'distributor_media'              => \Distributor\Utils\prepare_media( $post_id ),
-			'distributor_terms'              => \Distributor\Utils\prepare_taxonomy_terms( $post_id ),
-			'distributor_meta'               => \Distributor\Utils\prepare_meta( $post_id ),
+			'title'                            => get_the_title( $post_id ),
+			'slug'                             => $post->post_name,
+			'content'                          => apply_filters( 'the_content', $post->post_content ),
+			'type'                             => $post->post_type,
+			'status'                           => ( ! empty( $args['post_status'] ) ) ? $args['post_status'] : 'publish',
+			'excerpt'                          => $post->post_excerpt,
+			'distributor_original_source_id'   => $this->id,
+			'distributor_original_site_name'   => get_bloginfo( 'name' ),
+			'distributor_original_site_url'    => home_url(),
+			'distributor_original_post_url'    => get_permalink( $post_id ),
+			'distributor_original_post_parent' => (int) $post->post_parent,
+			'distributor_remote_post_id'       => $post_id,
+			'distributor_signature'            => $signature,
+			'distributor_media'                => \Distributor\Utils\prepare_media( $post_id ),
+			'distributor_terms'                => \Distributor\Utils\prepare_taxonomy_terms( $post_id ),
+			'distributor_meta'                 => \Distributor\Utils\prepare_meta( $post_id ),
 		];
 
 		// Gutenberg posts also distribute raw content.
